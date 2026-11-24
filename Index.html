@@ -1,0 +1,803 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Someone Special</title>
+
+<style>
+:root {
+  --pink: #f8b9d0;
+  --dark-pink: #d95791;
+  --light-pink: #fff0f6;
+  --text: #873d60;
+  --white: #fffafd;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background: linear-gradient(135deg, #ffe5ef, #fff5f8, #fbd3e3);
+  overflow-x: hidden;
+}
+
+.page {
+  display: none;
+  min-height: 100vh;
+  width: 100%;
+  padding: 28px 14px 35px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation: appear .45s ease;
+}
+
+.page.active {
+  display: flex;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  width: 100%;
+  max-width: 720px;
+  background: rgba(255,255,255,.88);
+  border: 1px solid #ffd2e2;
+  border-radius: 25px;
+  padding: 28px 22px;
+  text-align: center;
+  box-shadow: 0 12px 35px rgba(195, 91, 137, .14);
+}
+
+h1 {
+  font-size: clamp(25px, 6vw, 37px);
+  color: #c64e82;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #c64e82;
+  font-size: 22px;
+  margin: 18px 0 12px;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.85;
+  white-space: pre-line;
+}
+
+button {
+  border: none;
+  border-radius: 30px;
+  padding: 13px 21px;
+  margin: 8px 4px;
+  color: white;
+  background: linear-gradient(135deg, #ed8db4, #d85e94);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(195, 91, 137, .15);
+  transition: transform .2s, filter .2s;
+}
+
+button:active {
+  transform: scale(.96);
+}
+
+button:hover {
+  filter: brightness(.97);
+}
+
+.back-btn {
+  background: #bd9aaa;
+}
+
+.nav {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 25px;
+}
+
+.nav button {
+  min-width: 125px;
+}
+
+.small-note {
+  color: #a66a85;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.shayari-box {
+  display: none;
+  background: #fff0f6;
+  border: 1px solid #ffd1e2;
+  border-radius: 18px;
+  padding: 18px 13px;
+  margin: 15px 0;
+  animation: appear .5s ease;
+}
+
+.shayari-box p {
+  line-height: 2;
+  font-weight: 500;
+}
+
+.quiz-question {
+  text-align: left;
+  padding: 17px;
+  margin: 15px 0;
+  border-radius: 17px;
+  background: #fff1f6;
+  border: 1px solid #fbd6e4;
+}
+
+.quiz-question .question {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.quiz-question label {
+  display: block;
+  padding: 8px 5px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.quiz-question input {
+  accent-color: #d95791;
+  margin-right: 8px;
+}
+
+.feedback {
+  font-size: 14px;
+  font-weight: 700;
+  min-height: 20px;
+  margin-top: 8px;
+}
+
+#quizResult {
+  display: none;
+  padding: 18px;
+  border-radius: 17px;
+  background: #ffe6f0;
+  margin-top: 20px;
+}
+
+.compliment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  max-width: 340px;
+  margin: 22px auto;
+}
+
+.compliment-grid button {
+  height: 62px;
+  margin: 0;
+  font-size: 27px;
+  border-radius: 18px;
+  background: #f5a9c7;
+}
+
+#complimentMessage {
+  min-height: 80px;
+  background: #fff0f6;
+  border-radius: 17px;
+  padding: 16px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.envelope-area {
+  margin: 22px auto;
+}
+
+.envelope {
+  font-size: 65px;
+  background: transparent;
+  box-shadow: none;
+  padding: 12px;
+  animation: envelopeFloat 2s ease-in-out infinite;
+}
+
+@keyframes envelopeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+
+.letter-paper {
+  display: none;
+  background: #fffaf0;
+  color: #75445b;
+  border: 1px solid #f4d8df;
+  border-radius: 12px;
+  padding: 20px 16px;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.85;
+  font-size: 14px;
+  max-height: 65vh;
+  overflow-y: auto;
+  transform-origin: top center;
+}
+
+.letter-paper.open {
+  display: block;
+  animation: letterOpen .8s ease;
+}
+
+@keyframes letterOpen {
+  from {
+    opacity: 0;
+    transform: perspective(500px) rotateX(-75deg) scaleY(.5);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(500px) rotateX(0) scaleY(1);
+  }
+}
+
+.proposal-decor {
+  font-size: clamp(24px, 7vw, 38px);
+  margin: 8px 0 22px;
+  line-height: 1.7;
+}
+
+.proposal-text {
+  text-align: left;
+  background: #fff0f6;
+  padding: 18px;
+  border-radius: 18px;
+}
+
+.proposal-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 20px;
+}
+
+.proposal-buttons button {
+  width: 100%;
+  margin: 7px 0;
+  min-height: 48px;
+}
+
+.response {
+  display: none;
+  background: #ffe8f1;
+  border: 1px solid #f8c5d9;
+  padding: 20px 14px;
+  border-radius: 18px;
+  margin-top: 20px;
+  animation: appear .5s ease;
+}
+
+.response p {
+  font-weight: 600;
+}
+
+.floating-heart {
+  position: fixed;
+  top: -30px;
+  color: #e98ab1;
+  opacity: .65;
+  pointer-events: none;
+  z-index: -1;
+  animation: heartFall linear forwards;
+}
+
+@keyframes heartFall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 18px 11px 25px;
+  }
+
+  .card {
+    padding: 23px 15px;
+    border-radius: 21px;
+  }
+
+  p {
+    font-size: 15px;
+  }
+
+  .nav button {
+    min-width: 0;
+    padding: 12px 15px;
+    font-size: 12px;
+  }
+
+  .letter-paper {
+    font-size: 13px;
+    padding: 15px 12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HOME SCREEN -->
+<section class="page active" id="page0">
+  <div class="card">
+    <h1>SOMEONE SPECIAL</h1>
+    <p>Continue to the website</p>
+    <button onclick="goTo(1)">CONTINUE</button>
+  </div>
+</section>
+
+<!-- 1. WELCOME PAGE -->
+<section class="page" id="page1">
+  <div class="card">
+    <h1>1. THE WELCOME PAGE..!</h1>
+
+    <p>Hello..!! SOMEONE SPECIAL..!!
+
+Welcome to my website !!!
+
+well ye website sirf maine aapke liye hii banaya hai ! Jisme kuch Sections aur arena hai with my feelings jo ki word mein express karna hard tha !
+
+Toh aaram se, har ek section aur arena ko enjoy karo kyuki maine ye sab sirf aapke liye hii bahut pyar se banaya hai !!!
+
+So, can I begin ?</p>
+
+    <div class="nav">
+      <button class="back-btn" onclick="goTo(0)">BACK &lt;---</button>
+      <button onclick="goTo(2)">YES, OF COURSE</button>
+    </div>
+  </div>
+</section>
+
+<!-- 2. WHY DID I MAKE THIS SURPRISE -->
+<section class="page" id="page2">
+  <div class="card">
+    <h1>2. WHY DID I MAKE THIS SURPRISE FOR YOU ?</h1>
+
+    <p>Pata hai, maine ye surprise aapke liye kyu banaya hai ?
+
+Kyuki kabhi-kabhi kuch log hamari life mein itne special ban jaate hai ki unko apni dil ki baat batane ke liye simple words bhi kam pad jaate hai ! Toh ye website bhi maine aapko apni dil ki baat batane ke liye hii rakha hai !!!
+
+Aapke sath hua har chota-chota conversations, calls and cute moments... ye sab mere liye kaafi expensive hai...!
+
+Mai chahta tha ki aapko bhi thora special feel ho isiliye maine socha ki aapko ek website se surprise kiya jaaye aur apni dil ki baat bhi batayi jaaye ! I don't know ki aapko ye surprise kaisa lagega but I hope aapko ye thora aacha lagega !
+
+So, Enjoy the website/surprise..!!</p>
+
+    <div class="nav">
+      <button class="back-btn" onclick="goTo(1)">BACK &lt;---</button>
+      <button onclick="goTo(3)">OKAY, LET'S ENJOY</button>
+    </div>
+  </div>
+</section>
+
+<!-- 3. SHAYARI SESSION -->
+<section class="page" id="page3">
+  <div class="card">
+    <h1>3. THE SHYARI SESSION</h1>
+    <p>kuch shyari likha hu aapke liye</p>
+
+    <button onclick="revealShayari(1)">OPEN SURPRISE</button>
+
+    <div class="shayari-box" id="shayari1">
+      <p>Kuch kehna hai tumse, par keh nahi paata,
+Dil ki har baat lafzon mein likh nahi paata,
+Bas itna samajh lena meri khamoshi se,
+Tujhe khaas maanta hu, ye keh nahi paata !</p>
+    </div>
+
+    <button onclick="revealShayari(2)">OPEN SURPRISE</button>
+
+    <div class="shayari-box" id="shayari2">
+      <p>Na jaane kab tu inti khaas ho ban gyi,
+Meri har khushi ki wajah ban gyi.
+Kabhi socha nahi tha koi itna apna sa lagega,
+Magar tu toh meri dil ki sabse khaas ban gyi !</p>
+    </div>
+
+    <div class="nav">
+      <button class="back-btn" onclick="goTo(2)">BACK &lt;---</button>
+      <button onclick="goTo(4)">NEXT ---&gt;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 4. ARENA OF QUESTIONS -->
+<section class="page" id="page4">
+  <div class="card">
+    <h1>4. ARENA OF QUESTIONS</h1>
+    <p>Choose your answers and find out how many points you get!</p>
+
+    <form id="quizForm">
+
+      <div class="quiz-question">
+        <p class="question">1. Ham dono ka 1st meetup kha hua tha ?.</p>
+        <label><input type="radio" name="q1" value="a" onchange="checkOne(1)"> A.] School ground mein</label>
+        <label><input type="radio" name="q1" value="b" onchange="checkOne(1)"> B.] School ke bahar</label>
+        <label><input type="radio" name="q1" value="c" onchange="checkOne(1)"> C.] Class mein</label>
+        <label><input type="radio" name="q1" value="d" onchange="checkOne(1)"> D.] Van ke pass</label>
+        <div class="feedback" id="feedback1"></div>
+      </div>
+
+      <div class="quiz-question">
+        <p class="question">2. Ham dono ka favorite fast food ?</p>
+        <label><input type="radio" name="q2" value="a" onchange="checkOne(2)"> A.] Samosa</label>
+        <label><input type="radio" name="q2" value="b" onchange="checkOne(2)"> B.] Golgappa</label>
+        <label><input type="radio" name="q2" value="c" onchange="checkOne(2)"> C.] French fries</label>
+        <label><input type="radio" name="q2" value="d" onchange="checkOne(2)"> D.] Kurkure</label>
+        <div class="feedback" id="feedback2"></div>
+      </div>
+
+      <div class="quiz-question">
+        <p class="question">3. Ham dono ka dream destination ?</p>
+        <label><input type="radio" name="q3" value="a" onchange="checkOne(3)"> A.] Gangtok</label>
+        <label><input type="radio" name="q3" value="b" onchange="checkOne(3)"> B.] Ayodhya</label>
+        <label><input type="radio" name="q3" value="c" onchange="checkOne(3)"> C.] Varanasi</label>
+        <label><input type="radio" name="q3" value="d" onchange="checkOne(3)"> D.] Mumbai</label>
+        <div class="feedback" id="feedback3"></div>
+      </div>
+
+      <div class="quiz-question">
+        <p class="question">4. Ham dono ko kon sa Coldrink pasand hai ?</p>
+        <label><input type="radio" name="q4" value="a" onchange="checkOne(4)"> A.] Sprite</label>
+        <label><input type="radio" name="q4" value="b" onchange="checkOne(4)"> B.] Campa</label>
+        <label><input type="radio" name="q4" value="c" onchange="checkOne(4)"> C.] Pepsi</label>
+        <label><input type="radio" name="q4" value="d" onchange="checkOne(4)"> D.] Diet coke</label>
+        <div class="feedback" id="feedback4"></div>
+      </div>
+
+      <div class="quiz-question">
+        <p class="question">5. Maine aapka ek nickname kon se Coldrink ke naam pe rakha hai ?</p>
+        <label><input type="radio" name="q5" value="a" onchange="checkOne(5)"> A.] Sprite</label>
+        <label><input type="radio" name="q5" value="b" onchange="checkOne(5)"> B.] Campa</label>
+        <label><input type="radio" name="q5" value="c" onchange="checkOne(5)"> C.] Pepsi</label>
+        <label><input type="radio" name="q5" value="d" onchange="checkOne(5)"> D.] maza</label>
+        <div class="feedback" id="feedback5"></div>
+      </div>
+
+      <div class="quiz-question">
+        <p class="question">6. Ham dono ke friendship ko kitna time hua hai ?</p>
+        <label><input type="radio" name="q6" value="a" onchange="checkOne(6)"> A.] 1 year</label>
+        <label><input type="radio" name="q6" value="b" onchange="checkOne(6)"> B.] Approx 6 months</label>
+        <label><input type="radio" name="q6" value="c" onchange="checkOne(6)"> C.] 8 months</label>
+        <label><input type="radio" name="q6" value="d" onchange="checkOne(6)"> D.] 3 weeks</label>
+        <div class="feedback" id="feedback6"></div>
+      </div>
+
+      <div class="quiz-question">
+        <p class="question">7. Aisa kon sa cheez hai jo ki mujhe bahut pasand hai ? But aap vo mujhe bilkul kam share karti ho ?</p>
+        <label><input type="radio" name="q7" value="a" onchange="checkOne(7)"> A.] Hoga kuch</label>
+        <label><input type="radio" name="q7" value="b" onchange="checkOne(7)"> B.] Yaad nahi</label>
+        <label><input type="radio" name="q7" value="c" onchange="checkOne(7)"> C.] Sleeping rhyme</label>
+        <label><input type="radio" name="q7" value="d" onchange="checkOne(7)"> D.] Apna lunch</label>
+        <div class="feedback" id="feedback7"></div>
+      </div>
+
+      <div class="quiz-question">
+        <p class="question">8. Hamari favorite conversations kaisi hoti hai ?</p>
+        <label><input type="radio" name="q8" value="a" onchange="checkOne(8)"> A.] Pata nahi</label>
+        <label><input type="radio" name="q8" value="b" onchange="checkOne(8)"> B.] Boring</label>
+        <label><input type="radio" name="q8" value="c" onchange="checkOne(8)"> C.] sweet</label>
+        <label><input type="radio" name="q8" value="d" onchange="checkOne(8)"> D.] random,funny,cute and flirting</label>
+        <div class="feedback" id="feedback8"></div>
+      </div>
+
+      <div class="quiz-question">
+        <p class="question">9. Tumhara smile dekh kar mujhe kaisa feel hota hai ?</p>
+        <label><input type="radio" name="q9" value="a" onchange="checkOne(9)"> A.] Special feelings</label>
+        <label><input type="radio" name="q9" value="b" onchange="checkOne(9)"> B.] Kuch nahi</label>
+        <label><input type="radio" name="q9" value="c" onchange="checkOne(9)"> C.] Hoga kuch</label>
+        <label><input type="radio" name="q9" value="d" onchange="checkOne(9)"> D.] Bekar</label>
+        <div class="feedback" id="feedback9"></div>
+      </div>
+
+      <div class="quiz-question">
+        <p class="question">10. Mujhe tumhara kon sa quality sabse aacha lagta hai ?</p>
+        <label><input type="radio" name="q10" value="a" onchange="checkOne(10)"> A.] Gussa karna</label>
+        <label><input type="radio" name="q10" value="b" onchange="checkOne(10)"> B.] Smile karna</label>
+        <label><input type="radio" name="q10" value="c" onchange="checkOne(10)"> C.] Kuch bhi</label>
+        <label><input type="radio" name="q10" value="d" onchange="checkOne(10)"> D.] Padhna</label>
+        <div class="feedback" id="feedback10"></div>
+      </div>
+
+      <button type="button" onclick="showQuizScore()">SHOW MY POINTS</button>
+    </form>
+
+    <div id="quizResult">
+      <h2>How much points you got out of 10</h2>
+      <h1 id="scoreText">0 / 10</h1>
+    </div>
+
+    <div class="nav">
+      <button class="back-btn" onclick="goTo(3)">BACK &lt;---</button>
+      <button onclick="goTo(5)">NEXT ---&gt;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 5. ARENA OF COMPLIMENTS -->
+<section class="page" id="page5">
+  <div class="card">
+    <h1>5. ARENA OF COMPLIMENTS..!!</h1>
+    <p>Tap any emoji to reveal your message!</p>
+
+    <div class="compliment-grid">
+      <button onclick="showCompliment(0)">✨️</button>
+      <button onclick="showCompliment(1)">😉</button>
+      <button onclick="showCompliment(2)">🌷</button>
+      <button onclick="showCompliment(3)">🫶</button>
+      <button onclick="showCompliment(4)">🙃</button>
+      <button onclick="showCompliment(5)">🌹</button>
+    </div>
+
+    <div id="complimentMessage">
+      Choose an emoji to open your compliment...
+    </div>
+
+    <div class="nav">
+      <button class="back-btn" onclick="goTo(4)">BACK &lt;---</button>
+      <button onclick="goTo(6)">NEXT ---&gt;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 6. THE LETTER FOR YOU -->
+<section class="page" id="page6">
+  <div class="card">
+    <h1>6. THE LETTER FOR YOU..!!</h1>
+    <p>Tap the letter button to open your letter...</p>
+
+    <div class="envelope-area">
+      <button class="envelope" onclick="openLetter()">💌</button>
+    </div>
+
+    <p class="small-note">Tap to open the letter</p>
+
+    <div class="letter-paper" id="letterPaper">To,
+The Someone Special,
+
+From the Instagram chats
+Date :- Bhul gya 😅
+Through the website...!!
+
+Dear Someone Special,
+I beg to say that ki aap itni cute kaise ho yaar ? Aap Harpic ka use karti ho kya ? 😅 ! Arey gussa mat hona mazak kar rha tha !
+
+I want to really say that ki aap meri favorite notification ho, aap meri someone special ho aapki smile, aapki cuteness, aapki habits, aur aapki behaviors sab kuch mere liye bahut special hai ! Aapse baat karna hii mera ek important habit ban gya hai aapke sath kiya hua message, calls, snaps aur bhi bahut kuch sab kuch interesting hai mere liye aur kabhi mera bura maanga bhi ya aapka ruthna bhi bahut alag vibe add karta hai iss mistakes ko aur misunderstandings ko bhul kar hii ham dono ki bonding special hai so, maaf karte rha karo !
+
+Yaar please aap jaisi bhi ho bass change mat hona because I really love you. I don't know why ? But i realised ki mere dil mein aapke liye something-Something hai aur aap mere liye Everything ho ! Aur aapke liye mere andar friendship se thodi zayda feelings hai !
+
+So, here's my little confession :-
+
+I like you and I love you ! 🥺!!!👉👈
+
+No pressure, bass request hai aapse please maan jao na yaar ! Mai aapko force nahi kar rha hu bass aapse request kar rha hu ! Mujhe aapke past ke baare mein pata hai so, I understand your feelings so, isiliye mai koi pressure nahi create karna chahta hu aap comfortably apna decision le sakti ho !
+
+Bass ek request hai... apna cute smile kabhi mat khona, apna random videos aur cute photos share karne wala behavior continue rakhna please
+
+Your's,
+
+The person who smiles at your notifications..!
+
+Alien..!!</div>
+
+    <div class="nav">
+      <button class="back-btn" onclick="goTo(5)">BACK &lt;---</button>
+      <button onclick="goTo(7)">NEXT ---&gt;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 7. THE FINAL REVEAL -->
+<section class="page" id="page7">
+  <div class="card">
+    <h1>7. THE FINAL REVEAL..!!</h1>
+    <h2>Can I Ask You Something ?</h2>
+
+    <button onclick="goTo(8)">YES, OFCOURSE</button>
+
+    <div class="nav">
+      <button class="back-btn" onclick="goTo(6)">BACK &lt;---</button>
+      <span></span>
+    </div>
+  </div>
+</section>
+
+<!-- 8. THE PROPOSAL -->
+<section class="page" id="page8">
+  <div class="card">
+    <h1>8. THE PROPOSAL</h1>
+
+    <div class="proposal-decor">🥺 👉👈🌹🫶🌷🥹</div>
+
+    <div class="proposal-text">
+      <p>Dolphin aapko pata hai ki mai aapko like karta hu aur pasand bhi karta hu vo bhi class 6th se hii aur maine aapke liye hii approx 3 years wait kiya tha phir ab jab aapse mera friendship hua toh maine sirf aapke liye hamesha kuch efforts lagata hai  ! And you know the reason..!! Mai aapko force nahi karunga sirf request karunga aur kuch nahi ! No pressure ! I respect your decision !
+Bahut baar reject hone ke baad bhi ek baar phir se aapse puchna chahta hu ki 👇👉👈!!!! 🥺
+
+Kya tum meri BestFriend se kuch zayda banna chaogi ?
+
+Will you be my girlfriend ?
+
+Will you accept me as a boyfriend ?</p>
+    </div>
+
+    <div class="proposal-buttons">
+      <button onclick="showProposalResponse('accepted')">YES, I LOVE YOU ! ACCEPTED</button>
+      <button onclick="showProposalResponse('time')">NO, I NEED SOME TIME</button>
+    </div>
+
+    <div class="response" id="accepted">
+      <p>Ohhhh!!!! Yaaarrrrr!!!! Finalllyyyyyy!!!!!!
+Unexpected yaarrrrr....!!!!
+I lovveeeee youuuuuu tooooo.....!!!!!
+Thankyou very much yaarrrrrr..!!
+👉👈🥺🥹🌷🫶🌹😉🙃✨️🥰🧿</p>
+    </div>
+
+    <div class="response" id="time">
+      <p>Ohh!! It's okay ! No problem it's just a       1sided love ! I respect your feelings..!!
+🥹😭👉👈😕🫤😔</p>
+    </div>
+
+    <div class="nav">
+      <button class="back-btn" onclick="goTo(7)">BACK &lt;---</button>
+      <button onclick="goTo(0)">HOME</button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* PAGE NAVIGATION */
+function goTo(number) {
+  document.querySelectorAll(".page").forEach(function(page) {
+    page.classList.remove("active");
+  });
+
+  document.getElementById("page" + number).classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* SHAYARI REVEAL */
+function revealShayari(number) {
+  const box = document.getElementById("shayari" + number);
+  box.style.display = "block";
+}
+
+/* QUIZ ANSWERS */
+const correctAnswers = {
+  q1: "a",
+  q2: "b",
+  q3: "c",
+  q4: "d",
+  q5: "a",
+  q6: "b",
+  q7: "c",
+  q8: "d",
+  q9: "a",
+  q10: "b"
+};
+
+function checkOne(number) {
+  const selected = document.querySelector(
+    'input[name="q' + number + '"]:checked'
+  );
+
+  const feedback = document.getElementById("feedback" + number);
+
+  if (!selected) return;
+
+  if (selected.value === correctAnswers["q" + number]) {
+    feedback.textContent = "wow that's great";
+    feedback.style.color = "#25834c";
+  } else {
+    feedback.textContent = "opps you're wrong";
+    feedback.style.color = "#d34e72";
+  }
+
+  document.getElementById("quizResult").style.display = "none";
+}
+
+function showQuizScore() {
+  let score = 0;
+
+  for (let i = 1; i <= 10; i++) {
+    const selected = document.querySelector(
+      'input[name="q' + i + '"]:checked'
+    );
+
+    if (selected && selected.value === correctAnswers["q" + i]) {
+      score++;
+    }
+  }
+
+  document.getElementById("scoreText").textContent = score + " / 10";
+  document.getElementById("quizResult").style.display = "block";
+}
+
+/* COMPLIMENTS */
+const complimentMessages = [
+  "aapki cute si smile har baar mera mood aacha kar deti hai so, please smile karti raho",
+
+  "tumhara awaz bahut pyara lagta hai so, please hamesha Sleeping rhyme sunaya karo",
+
+  "Tumse baat karne pe normal day bhi interesting hone lagta hai so, please hamesha baat kiya karo !",
+
+  "Aapka vibe bahut alag hii hai but bahut pyara hai !",
+
+  "Tumhare sath har normal conversation special lagta hai !",
+
+  "Tum jaisi bhi ho bahut special ho aur tum bilkul gullab jamun ki tarah hii sweet ho !"
+];
+
+function showCompliment(number) {
+  document.getElementById("complimentMessage").textContent =
+    complimentMessages[number];
+}
+
+/* LETTER OPENING */
+function openLetter() {
+  const letter = document.getElementById("letterPaper");
+  letter.classList.add("open");
+}
+
+/* PROPOSAL RESPONSE */
+function showProposalResponse(response) {
+  document.getElementById("accepted").style.display = "none";
+  document.getElementById("time").style.display = "none";
+
+  document.getElementById(response).style.display = "block";
+
+  document.getElementById(response).scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+}
+
+/* FLOATING HEARTS */
+function createHeart() {
+  const heart = document.createElement("span");
+
+  heart.className = "floating-heart";
+  heart.textContent = "♥";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (12 + Math.random() * 15) + "px";
+  heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+
+  document.body.appendChild(heart);
+
+  setTimeout(function() {
+    heart.remove();
+  }, 10000);
+}
+
+setInterval(createHeart, 1000);
+</script>
+
+</body>
+</html>
